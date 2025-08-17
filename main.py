@@ -3,7 +3,7 @@ import os
 import time
 
 mode: int = 1
-DELAY: float = 0.2
+delay: float = 0.2
 
 lights: list[int] = [0, 0, 1]
 
@@ -18,7 +18,7 @@ def mode_1():
     while True:
         toggle_lights(lights)
 
-        time.sleep(DELAY)
+        time.sleep(delay)
 
         lights = lights[1:] + [lights[0]]
 
@@ -30,7 +30,7 @@ def mode_2():
     while True:
         toggle_lights(lights)
 
-        time.sleep(DELAY)
+        time.sleep(delay)
 
         if lights == [1, 0, 0]:
             direction = True
@@ -52,11 +52,11 @@ def mode_3():
         
         toggle_lights(lights)
 
-        time.sleep(DELAY)
+        time.sleep(delay)
 
 
 def parse_arguments(args: list[str]) -> None:
-    global mode
+    global mode, delay
 
     for i in range(len(args)):
         n = args[i]
@@ -69,12 +69,23 @@ def parse_arguments(args: list[str]) -> None:
                 print("Not enough arguments!")
                 sys.exit()
             except ValueError:
-                print("Type error! Pleas enter an integer.")
+                print("Type error! Please enter an integer.")
                 sys.exit()
 
+        elif n in ["-d", "--delay"]:
+            try:
+                delay = float(args[i+1])
+            except IndexError:
+                print("Not enough arguments!")
+                sys.exit()
+            except ValueError:
+                print("Type error! Please enter a float or an integer.")
+
+        # help
         elif n in ["-h", "--help"]:
             print("""
-                  -m, --mode <mode> : set disco mode (1..3)
+                  -m, --mode <mode> : set disco mode (1..3), default: 1
+                  -d, --delay <seconds> : set next iteration wait delay, default: 0.2
                   -h, --help        : print this message
                   """)
             sys.exit()        
