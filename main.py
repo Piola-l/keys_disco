@@ -1,5 +1,5 @@
 import sys
-import os
+import subprocess
 import time
 
 mode: int = 1
@@ -8,9 +8,24 @@ delay: float = 0.2
 lights: list[int] = [0, 0, 1]
 
 def toggle_lights(lights: list[int]):
-    _ = os.system(f"brightnessctl -d input5::numlock set {lights[0]} > /dev/null 2>&1")
-    _ = os.system(f"brightnessctl -d input5::capslock set {lights[1]} > /dev/null 2>&1")
-    _ = os.system(f"brightnessctl -d input5::scrolllock set {lights[2]} > /dev/null 2>&1")
+    _ = subprocess.run(
+        ["brightnessctl", "-d", "input5::numlock", "set", str(lights[0])],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+
+    _ = subprocess.run(
+        ["brightnessctl", "-d", "input5::capslock", "set", str(lights[1])],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+
+    _ = subprocess.run(
+        ["brightnessctl", "-d", "input5::scrolllock", "set", str(lights[2])],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+
 
 def mode_1():
     global lights
@@ -61,7 +76,7 @@ def parse_arguments(args: list[str]) -> None:
     for i in range(len(args)):
         n = args[i]
 
-        #  Set mode
+        # Set mode
         if n in ["-m", "--mode"]:
             try:
                 mode = int(args[i+1])
@@ -72,6 +87,7 @@ def parse_arguments(args: list[str]) -> None:
                 print("Type error! Please enter an integer.")
                 sys.exit()
 
+        # Delay
         elif n in ["-d", "--delay"]:
             try:
                 delay = float(args[i+1])
@@ -81,7 +97,7 @@ def parse_arguments(args: list[str]) -> None:
             except ValueError:
                 print("Type error! Please enter a float or an integer.")
 
-        # help
+        # Help
         elif n in ["-h", "--help"]:
             print("""
                   -m, --mode <mode> : set disco mode (1..3), default: 1
