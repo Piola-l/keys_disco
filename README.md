@@ -1,6 +1,6 @@
 # Keys disco
 
-Use only on Linux. Systemd brightnessctl is required.
+Works only on Linux. Systemd brightnessctl is required.
 
 Run with
 ``` python 
