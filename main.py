@@ -2,15 +2,15 @@ import sys
 import os
 import time
 
-mode  = 1
-DELAY = 0.2
+mode: int = 1
+DELAY: float = 0.2
 
-lights = [0, 0, 1]
+lights: list[int] = [0, 0, 1]
 
-def toggle_lights(lights):
-    os.system(f"brightnessctl -d input5::numlock set {lights[0]} > /dev/null 2>&1")
-    os.system(f"brightnessctl -d input5::capslock set {lights[1]} > /dev/null 2>&1")
-    os.system(f"brightnessctl -d input5::scrolllock set {lights[2]} > /dev/null 2>&1")
+def toggle_lights(lights: list[int]):
+    _ = os.system(f"brightnessctl -d input5::numlock set {lights[0]} > /dev/null 2>&1")
+    _ = os.system(f"brightnessctl -d input5::capslock set {lights[1]} > /dev/null 2>&1")
+    _ = os.system(f"brightnessctl -d input5::scrolllock set {lights[2]} > /dev/null 2>&1")
 
 def mode_1():
     global lights
@@ -44,19 +44,18 @@ def mode_2():
 
 def mode_3():
     global lights
-    iter = False
     lights = [0, 1, 0]
     
     while True:
         for i in range(len(lights)):
             lights[i] = 1-lights[i]
         
-    toggle_lights(lights)
+        toggle_lights(lights)
 
-    time.sleep(DELAY)
+        time.sleep(DELAY)
 
 
-def parse_arguments(args):
+def parse_arguments(args: list[str]) -> None:
     global mode
 
     for i in range(len(args)):
@@ -85,7 +84,7 @@ if __name__ == "__main__":
 
     if len(args) > 1:
         parse_arguments(args)        
-    
+
     match mode:
         case 1:
             mode_1()
@@ -93,3 +92,6 @@ if __name__ == "__main__":
             mode_2()
         case 3:
             mode_3()
+        case _:
+            print("Mode does not exist!")
+            sys.exit()
